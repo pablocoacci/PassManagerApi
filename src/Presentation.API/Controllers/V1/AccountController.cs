@@ -63,10 +63,10 @@ namespace Presentation.API.Controllers.V1
             var result = await mediator.Send(request);
 
             // Create an identity for the user
-            var identity = jwtFactory.GenerateClaimsIdentity(request.Email, result.Id, result.Claims);
+            var identity = jwtFactory.GenerateClaimsIdentity(request.UserName, result.Id, result.Claims);
 
             // With the identity generate a jwt and a refresh token
-            var accessToken = await jwtFactory.GenerateEncodedTokenAsync(request.Email, identity);
+            var accessToken = await jwtFactory.GenerateEncodedTokenAsync(request.UserName, identity);
             var refreshToken = jwtFactory.GenerateRefreshToken();
 
             // Save tokens into db

@@ -10,7 +10,6 @@ namespace Core.V1.Account.Register
 {
     public class RegisterRequestHandler : IRequestHandler<RegisterRequest>
     {
-        private static readonly Random random = new Random(1);
         private readonly UserManager<User> userManager;
 
         public RegisterRequestHandler(UserManager<User> userManager)
@@ -20,7 +19,14 @@ namespace Core.V1.Account.Register
 
         public async Task<Unit> Handle(RegisterRequest request, CancellationToken cancellationToken)
         {
-            var user = new User(request.Email);
+            var user = new User(request.UserName)
+            {
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                CreatedOn = DateTime.Now,
+                EmailConfirmed = true
+            };
 
             var result = await userManager.CreateAsync(user, request.Password);
 

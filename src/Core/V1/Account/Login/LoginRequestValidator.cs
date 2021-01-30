@@ -6,12 +6,13 @@ namespace Core.V1.Account.Login
     {
         public LoginRequestValidator()
         {
-            RuleFor(m => m.Email)
+            RuleFor(m => m.UserName)
                 .NotEmpty()
-                .EmailAddress();
+                .NotNull();
 
             RuleFor(m => m.Password)
-                .NotEmpty();
+                .NotEmpty()
+                .NotNull();
         }
     }
 }

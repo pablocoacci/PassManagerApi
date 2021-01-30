@@ -25,7 +25,7 @@ namespace Core.V1.Account.Login
 
         public async Task<LoginModel> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
-            var user = await userManager.FindByNameAsync(request.Email);
+            var user = await userManager.FindByNameAsync(request.UserName);
 
             if (user == null || !user.EmailConfirmed)
             {
