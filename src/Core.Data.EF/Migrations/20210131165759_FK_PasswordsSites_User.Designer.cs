@@ -4,14 +4,16 @@ using Core.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Core.Data.EF.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210131165759_FK_PasswordsSites_User")]
+    partial class FK_PasswordsSites_User
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,7 +76,7 @@ namespace Core.Data.EF.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PasswordSites");
+                    b.ToTable("PasswordsSites");
                 });
 
             modelBuilder.Entity("Core.Entities.Session", b =>

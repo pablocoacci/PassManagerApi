@@ -8,7 +8,7 @@ namespace Core.Data.EF.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<PasswordSite> builder)
         {
-            builder.ToTable("PasswordsSites");
+            builder.ToTable("PasswordSites");
 
             builder.HasKey(x => x.Id);
 
@@ -43,6 +43,10 @@ namespace Core.Data.EF.EntityTypeConfigurations
                 .IsRequired(true)
                 .IsUnicode(true)
                 .HasMaxLength(500);
+
+            builder.HasOne<User>()
+                .WithMany()
+                .HasForeignKey(x => x.UserId);
         }
     }
 }

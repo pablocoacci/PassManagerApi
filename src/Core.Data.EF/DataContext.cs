@@ -13,7 +13,7 @@ namespace Core.Data.EF
         }
 
         public DbSet<Session> Sessions { get; set; }
-        public DbSet<PasswordSite> PasswordSite { get; set; }
+        public DbSet<PasswordSite> PasswordSites { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
