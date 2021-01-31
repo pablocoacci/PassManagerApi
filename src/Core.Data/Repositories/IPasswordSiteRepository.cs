@@ -9,7 +9,7 @@ namespace Core.Data.Repositories
         void Add(PasswordSite password);
         void Delete(PasswordSite password);
         void Update(PasswordSite password);
-        Task<PasswordSite> GetPasswordSiteById(int id);
+        Task<PasswordSite> GetPasswordSiteById(string userId, int passwordId);
         Task<IList<PasswordSite>> GetAllPasswords(string userId, ISortParams sortParams, IPageParams pageParams);
     }
 }

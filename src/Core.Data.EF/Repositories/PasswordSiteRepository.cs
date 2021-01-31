@@ -27,8 +27,8 @@ namespace Core.Data.EF.Repositories
         public void Update(PasswordSite password)
             => dataContext.PasswordSites.Update(password);
 
-        public async Task<PasswordSite> GetPasswordSiteById(int id)
-            => await dataContext.PasswordSites.Where(x => x.Id == id).FirstOrDefaultAsync();
+        public async Task<PasswordSite> GetPasswordSiteById(string userId, int passwordId)
+            => await dataContext.PasswordSites.Where(x => x.UserId == userId && x.Id == passwordId).FirstOrDefaultAsync();
 
         public async Task<IList<PasswordSite>> GetAllPasswords(string userId, ISortParams sortParams, IPageParams pageParams)
             => await dataContext.PasswordSites

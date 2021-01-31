@@ -40,7 +40,7 @@ namespace Core.Data.EF.EntityTypeConfigurations
                 .HasMaxLength(100);
 
             builder.Property(x => x.SecretAnswer)
-                .IsRequired(true)
+                .IsRequired(false)
                 .IsUnicode(true)
                 .HasMaxLength(500);
 
