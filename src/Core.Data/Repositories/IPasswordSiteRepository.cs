@@ -10,6 +10,7 @@ namespace Core.Data.Repositories
         void Delete(PasswordSite password);
         void Update(PasswordSite password);
         Task<PasswordSite> GetPasswordSiteById(string userId, int passwordId);
-        Task<IList<PasswordSite>> GetAllPasswords(string userId, ISortParams sortParams, IPageParams pageParams);
+        Task<int> GetAllPasswordsCount(string userId, string search);
+        Task<IList<PasswordSite>> GetAllPasswords(string userId, string search, ISortParams sortParams, IPageParams pageParams);
     }
 }

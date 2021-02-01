@@ -30,11 +30,20 @@ namespace Core.Data.EF.Repositories
         public async Task<PasswordSite> GetPasswordSiteById(string userId, int passwordId)
             => await dataContext.PasswordSites.Where(x => x.UserId == userId && x.Id == passwordId).FirstOrDefaultAsync();
 
-        public async Task<IList<PasswordSite>> GetAllPasswords(string userId, ISortParams sortParams, IPageParams pageParams)
+        public async Task<int> GetAllPasswordsCount(string userId, string search)
+        {
+            search = search.ToUpper();
+            return await dataContext.PasswordSites
+                        .Where(x => x.UserId == userId)
+                        .Where(!string.IsNullOrEmpty(search), x => x.NameSite.ToUpper().Contains(search) || x.UserNameSite.ToUpper().Contains(search) || x.Password.ToUpper().Contains(search))
+                        .CountAsync();
+        }
+
+        public async Task<IList<PasswordSite>> GetAllPasswords(string userId, string search, ISortParams sortParams, IPageParams pageParams)
             => await dataContext.PasswordSites
                         .Where(x => x.UserId == userId)
+                        .Where(string.IsNullOrEmpty(search), x => x.NameSite.Contains(search) || x.UserNameSite.Contains(search))
                         .OrderBy(sortParams, "nameSite", x => x.NameSite)
-                        .ThenBy(sortParams, "urlSite", x => x.URLSite)
                         .ThenBy(sortParams, "userNameSite", x => x.UserNameSite)
                         .ThenBy(sortParams, "password", x => x.Password)
                         .Skip(pageParams.Skip)

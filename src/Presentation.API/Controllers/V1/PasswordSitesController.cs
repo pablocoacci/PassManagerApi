@@ -1,11 +1,15 @@
 ﻿using System.Threading.Tasks;
+using Core.Data;
 using Core.V1.PasswordSites.CreatePasswordSite;
 using Core.V1.PasswordSites.DeletePasswordSite;
 using Core.V1.PasswordSites.GetPasswordSiteById;
+using Core.V1.PasswordSites.GetPasswordSiteList;
+using Core.V1.PasswordSites.GetPasswordSiteList.Models;
 using Core.V1.PasswordSites.UpdatePasswordSite;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.API.Helpers.Extensions;
 
 namespace Presentation.API.Controllers.V1
 {
@@ -25,6 +29,7 @@ namespace Presentation.API.Controllers.V1
         [HttpPost("create-passwordsite")]
         public async Task<ActionResult> CreatePasswordSite([FromBody] CreatePasswordSiteRequest request)
         {
+            request.SetUserName(User.UserName());
             await mediator.Send(request);
             return OkNoContent();
         }
@@ -33,6 +38,7 @@ namespace Presentation.API.Controllers.V1
         [HttpPost("update-passwordsite")]
         public async Task<ActionResult> UpdatePasswordSite([FromBody] UpdatePasswordSiteRequest request)
         {
+            request.SetUserName(User.UserName());
             await mediator.Send(request);
             return OkNoContent();
         }
@@ -41,6 +47,7 @@ namespace Presentation.API.Controllers.V1
         [HttpDelete("delete-passwordsite")]
         public async Task<ActionResult> DeletePasswordSite([FromQuery] DeletePasswordSiteRequest request)
         {
+            request.SetUserName(User.UserName());
             await mediator.Send(request);
             return OkNoContent();
         }
@@ -49,8 +56,18 @@ namespace Presentation.API.Controllers.V1
         [HttpGet("get-passwordsite-byid")]
         public async Task<ActionResult> GetPasswordSiteById([FromQuery] GetPasswordSiteByIdRequest request)
         {
+            request.SetUserName(User.UserName());
             await mediator.Send(request);
             return OkNoContent();
+        }
+
+        [Authorize]
+        [HttpGet("get-passwordsite-list")]
+        public async Task<ActionResult<PagedResults<PasswordSiteModel>>> GetPasswordSiteList([FromQuery] GetPasswordSiteListRequest request)
+        {
+            request.SetUserName(User.UserName());
+            var result = await mediator.Send(request);
+            return Ok(result);
         }
     }
 }
