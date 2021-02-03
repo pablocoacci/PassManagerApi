@@ -37,12 +37,13 @@ namespace Presentation.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureAuth(services);
             VersioningConfiguration(services);
 
             services.AddDbContext<DataContext>(options => options
                 .UseSqlServer(Configuration.GetConnectionString("Sql")));
-
+            
+            ConfigureAuth(services);
+            
             services.AddControllers();
 
             services.AddMvc()
@@ -145,13 +146,13 @@ namespace Presentation.API
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = jwtSigningKey,
 
-                        RequireExpirationTime = true,
-                        ValidateLifetime = true,
+                        RequireExpirationTime = false,
+                        ValidateLifetime = false,
                         ClockSkew = TimeSpan.Zero
                     };
                     configureOptions.SaveToken = true;
                     //configureOptions.IncludeErrorDetails = Env.IsDevelopment();
-                });
+                }).AddCookie(IdentityConstants.ApplicationScheme);
 
             // api user claim policy
             services.AddAuthorization(options =>
@@ -170,7 +171,7 @@ namespace Presentation.API
             });
             builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services).AddRoles<IdentityRole>();
             builder.AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
-
+            builder.AddSignInManager<SignInManager<User>>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
         }
 
@@ -215,6 +216,14 @@ namespace Presentation.API
             }
 
             app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -224,15 +233,6 @@ namespace Presentation.API
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
             });
         }
     }
